@@ -1,2 +1,3 @@
-export { default as ChatLlmView } from './ChatLlmViewNativeComponent';
-export * from './ChatLlmViewNativeComponent';
+export function multiply(a: number, b: number): Promise<number> {
+  return Promise.resolve(a * b);
+}

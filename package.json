@@ -1,7 +1,7 @@
 {
   "name": "react-native-chat-llm",
   "version": "0.1.0",
-  "description": "A Chat Interface for LLMs",
+  "description": "a Chat Interface for LLMs",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
@@ -41,7 +41,7 @@
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
+    "clean": "del-cli lib",
     "prepare": "bob build",
     "release": "release-it"
   },
@@ -66,10 +66,9 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
     "@evilmartians/lefthook": "^1.5.0",
-    "@react-native-community/cli": "15.0.1",
     "@react-native/eslint-config": "^0.73.1",
     "@release-it/conventional-changelog": "^9.0.2",
-    "@types/jest": "^29.5.5",
+    "@types/jest": "^29.5.14",
     "@types/react": "^18.2.44",
     "commitlint": "^17.0.2",
     "del-cli": "^5.1.0",
@@ -83,7 +82,6 @@
     "react-native": "0.76.3",
     "react-native-builder-bob": "^0.33.1",
     "release-it": "^17.10.0",
-    "turbo": "^1.10.7",
     "typescript": "^5.2.2"
   },
   "resolutions": {
@@ -162,7 +160,6 @@
     "source": "src",
     "output": "lib",
     "targets": [
-      "codegen",
       [
         "commonjs",
         {
@@ -184,22 +181,9 @@
       ]
     ]
   },
-  "codegenConfig": {
-    "name": "RNChatLlmViewSpec",
-    "type": "all",
-    "jsSrcsDir": "src",
-    "outputDir": {
-      "ios": "ios/generated",
-      "android": "android/generated"
-    },
-    "android": {
-      "javaPackageName": "com.chatllm"
-    },
-    "includesGeneratedCode": true
-  },
   "create-react-native-library": {
-    "languages": "kotlin-objc",
-    "type": "view-mixed",
+    "languages": "js",
+    "type": "library",
     "version": "0.44.2"
   }
 }

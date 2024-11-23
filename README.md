@@ -1,7 +1,6 @@
 # react-native-chat-llm
 
-A chat component that will give you an interface and take care of all the needed functions to use an LLM. Uses LLama.cpp.
-
+a Chat Interface for LLMs
 
 ## Installation
 
@@ -13,11 +12,11 @@ npm install react-native-chat-llm
 
 
 ```js
-import { ChatLlmView } from "react-native-chat-llm";
+import { multiply } from 'react-native-chat-llm';
 
 // ...
 
-<ChatLlmView color="tomato" />
+const result = await multiply(3, 7);
 ```
 
 

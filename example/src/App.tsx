@@ -1,10 +1,17 @@
-import { StyleSheet, View } from 'react-native';
-import { ChatLlmView } from 'react-native-chat-llm';
+import { useState, useEffect } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import { multiply } from 'react-native-chat-llm';
 
 export default function App() {
+  const [result, setResult] = useState<number | undefined>();
+
+  useEffect(() => {
+    multiply(4, 7).then(setResult);
+  }, []);
+
   return (
     <View style={styles.container}>
-      <ChatLlmView color="#32a852" style={styles.box} />
+      <Text>Result: {result}</Text>
     </View>
   );
 }
