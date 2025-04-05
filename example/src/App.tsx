@@ -1,30 +1,29 @@
-import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-chat-llm';
+import { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ChatLlm } from 'react-native-chat-llm';
+// import { styles } from './styles';
 
-export default function App() {
-  const [result, setResult] = useState<number | undefined>();
-
-  useEffect(() => {
-    multiply(4, 7).then(setResult);
-  }, []);
+const App = () => {
+  const [msg, setMsg] = useState('');
+  // const [msgs, setMsgs] = useState(['Hu', 'By', 'Yp', '**ffdfd**']);
+  const [refreshing, setRefreshing] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ChatLlm
+        msg={msg}
+        setMsg={setMsg}
+        msgs={[]}
+        backgroundImage={require('../assets/background.png')}
+        saveOption={'MMKV'}
+        refreshing={refreshing}
+        onRefresh={() => {
+          setRefreshing(true);
+          setTimeout(() => setRefreshing(false), 10000);
+        }}
+      />
+    </SafeAreaView>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});
+export default App;

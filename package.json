@@ -66,6 +66,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
     "@evilmartians/lefthook": "^1.5.0",
+    "@expo/vector-icons": "^14.0.4",
     "@react-native/eslint-config": "^0.73.1",
     "@release-it/conventional-changelog": "^9.0.2",
     "@types/jest": "^29.5.14",
@@ -88,6 +89,7 @@
     "@types/react": "^18.2.44"
   },
   "peerDependencies": {
+    "@expo/vector-icons": "*",
     "llama.rn": "*",
     "react": "*",
     "react-native": "*"
