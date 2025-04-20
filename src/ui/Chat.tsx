@@ -1,10 +1,11 @@
-import React from 'react';
-import { View, FlatList, ImageBackground, RefreshControl } from 'react-native';
+import { View, FlatList, RefreshControl, Image } from 'react-native';
 
 import type { ChatProps } from '../utils/types';
 import { MsgContainer } from './MsgContainer';
 import { InputField } from './InputField';
 import { useChat } from '../hooks';
+
+import { styles } from '../styles/chatStyles';
 
 export const ChatLlm = (props: ChatProps) => {
   const {
@@ -12,16 +13,23 @@ export const ChatLlm = (props: ChatProps) => {
     sendMsg,
     disableSend,
     isLoadingResponse,
-    StopResponseLLM,
+    stopResponseLLM,
     inEditMode,
     cancelEdit,
-  } = useChat();
+  } = useChat(props);
 
   return (
-    <Container
-      chatProps={props}
-      style={{ flex: 1, backgroundColor: props.backgroundColor }}
-    >
+    <View style={{ flex: 1, backgroundColor: props.backgroundColor }}>
+      {/* Background Image  */}
+      {props.backgroundImage && (
+        <Image
+          source={props.backgroundImage}
+          resizeMode={props.backgroundImageResizeMode || 'cover'}
+          style={styles.backgroundImage}
+        />
+      )}
+
+      {/* The Chat List */}
       <FlatList
         data={props.msgs}
         renderItem={({ item, index }) => (
@@ -53,11 +61,11 @@ export const ChatLlm = (props: ChatProps) => {
         sendMsg={sendMsg}
         disableSend={disableSend}
         isLoadingResponse={isLoadingResponse}
-        StopResponseLLM={StopResponseLLM}
+        StopResponseLLM={stopResponseLLM}
         inEditMode={inEditMode}
         cancelEdit={cancelEdit}
       />
-    </Container>
+    </View>
   );
 };
 
@@ -65,28 +73,4 @@ export const ChatLlm = (props: ChatProps) => {
 ChatLlm.send = (message: string) => {
   console.log(`Sending message: ${message}`);
   // Add your logic here to handle sending a message
-};
-
-const Container = ({
-  chatProps,
-  children,
-  ...rest
-}: {
-  chatProps: ChatProps;
-  children: React.ReactElement | React.ReactElement[];
-  [key: string]: any;
-}) => {
-  if (chatProps.backgroundImage) {
-    return (
-      <ImageBackground
-        source={chatProps.backgroundImage}
-        resizeMode={chatProps.backgroundImageResizeMode || 'cover'}
-        {...rest}
-      >
-        {children}
-      </ImageBackground>
-    );
-  } else {
-    return <View {...rest}>{children}</View>;
-  }
 };

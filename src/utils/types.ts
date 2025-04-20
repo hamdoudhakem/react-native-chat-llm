@@ -22,19 +22,40 @@ export interface ChatPropsBase {
   msg: string; // TODO(ME): Check if I should use a string or a Message Type
   setMsg: React.Dispatch<React.SetStateAction<string>>;
   msgs: Message[];
-  token?: {
-    newMsg: boolean;
-    msgToUpdateId: number /*REMARK/IMPORTANT: WE GOT A ARCHITECTURE PROBLEM HERE, I NEED TO UNDERSTAND HOW TO DO THIS PART BEFORE CODING IT */;
-    msg: string;
-    role: Role;
-  } | null;
+  setMsgs: React.Dispatch<React.SetStateAction<Message[]>>;
+  // TODO(ME): Complete this later/ Or completely discard it. depends on the architecture
+  auto?: boolean;
+  MsgGenerator: (func: (token: string) => void) => Promise<void>; // returns the AI response
+  cancelResponse: () => void;
+  // REMARK(ME): I don't think we can create this (too constraining for user), but let's keep it for now
+  GenerateGenerator?: () => (func: (token: string) => void) => Promise<void>; // returns the AI response generator
+
+  // Selected Options (additional options to "Copy" and "delete")
+  selectedOptions?: {
+    name: string;
+    image: number | { uri: string } | ReactElements; // in case of custom components or expo-vetors
+    onPress: () => void;
+  }[];
+
+  // Send Options (additional options like send image or file)
+  sendOptions?: {
+    name: string;
+    image: number | { uri: string } | ReactElements; // in case of custom components or expo-vetors
+    onPress: () => void;
+  }[];
 
   // Msg Rendering
   userImage?: number | { uri: string };
   aiImage?: number | { uri: string };
   msgContainerStyle?: StyleProp<ViewStyle>;
   msgTextStyle?: { role: Role; style: StyleProp<ViewStyle> };
-  msgTextParsers?: ((msg: string) => React.ReactElement[])[]; // Italicize, etc...
+  msgTextParsers?: (msg: string) => React.ReactElement[]; // Italicize, etc...
+  msgLoader?: ReactElements; // what to show inside the msg container when the msg is loading
+  aiMsgLoadingOption?: AiMsgLoadingType; // TODO(ME): set if the msg loads in one go or with each token
+
+  // Sounds
+  userMsgSound?: number; // TODO(ME): set the Sound logic
+  aiMsgSound?: number;
 
   // ListView Behavior
   viewabilityConfig?: ViewabilityConfig;
@@ -62,15 +83,12 @@ export interface ChatPropsBase {
     | 'center';
 
   // Persistence Options
+  loadSaved?: boolean; // TODO(Me): if I should show the last saved convo or just use what's in msgs
   saveOption?: SaveOptionsType;
-
-  // TODO(ME): Complete this later/ Or completely discard it. depends on the architecture
-  auto?: boolean;
-  MsgGenerator?: (func: (token: string) => void) => Promise<void>; // returns the AI response
-  // REMARK(ME): I don't think we can create this (too constraining for user), but let's keep it for now
-  GenerateGenerator?: () => (func: (token: string) => void) => Promise<void>; // returns the AI response generator
 }
 
+//TODO(ME): Refreshing will be about showing pervious messages to the loaded ones (or loading everything)
+// Maybe I will get rid of this
 type ChatPropsWithRefresh = ChatPropsBase & {
   refreshing: boolean;
   onRefresh: () => void;
@@ -113,4 +131,5 @@ export interface InputFieldProps {
 }
 
 export type SaveOptionsType = 'MMKV' | 'AsyncStorage' | undefined;
+export type AiMsgLoadingType = 'All' | 'typing' | undefined;
 export type Role = 'User' | 'AI' | 'All';

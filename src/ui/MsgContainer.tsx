@@ -1,4 +1,3 @@
-/*eslint-disable @typescript-eslint/no-unused-vars*/
 import { View, Text, Pressable, Animated } from 'react-native';
 import type { MsgContainerProps } from '../utils/types';
 
@@ -122,12 +121,9 @@ const MsgContainer = ({
   );
 };
 
+//TODO(ME): Fix the message not updating as the response is being written
 const MsgContainerOptimized = React.memo(
-  (props: MsgContainerProps) => (
-    // console.log('Rendred Item with ID',props.msg?.id)
-
-    <MsgContainer {...props} />
-  ),
+  (props: MsgContainerProps) => <MsgContainer {...props} />,
   (prev, next) => prev.msg === next.msg
 );
 

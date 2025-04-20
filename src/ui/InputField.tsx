@@ -52,7 +52,7 @@ export const InputField = ({
             <FontAwesome name="send" size={24} color="white" />
           )
         ) : (
-          <FontAwesome name="stop" size={22} color="white" />
+          <FontAwesome name="stop" size={24} color="white" />
         )}
       </TouchableOpacity>
     </View>

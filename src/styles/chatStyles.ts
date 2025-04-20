@@ -1,11 +1,19 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { COLORS } from './Theme';
 
+//TODO(ME): Offer customisation in these styles to the user. i.e: the send button color, ...
 export const styles = StyleSheet.create({
+  backgroundImage: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
   inputAndSendContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 5,
+    marginBottom: 7,
     alignItems: 'center',
   },
   textInputContainer: {
@@ -14,8 +22,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#bdd7e6',
     alignItems: 'center',
-    elevation: 3,
-    borderRadius: 15,
+    elevation: 2,
+    borderRadius: 50,
     marginLeft: 6,
     marginRight: 3,
     paddingRight: 3,
@@ -26,12 +34,12 @@ export const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   sendButton: {
-    height: 40,
-    width: '15%',
+    height: 50,
+    width: 50,
     marginRight: 3,
     paddingRight: 3,
     backgroundColor: 'blue',
-    borderRadius: 30,
+    borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
   },
