@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import type { TextInput } from 'react-native';
+import type { FlatList, TextInput } from 'react-native';
 
 import type { ChatProps, Message, Role } from '../utils/types';
 
@@ -19,6 +19,7 @@ const createMsg = (
 };
 
 export const useChat = (props: ChatProps) => {
+  const refMsgList = useRef<FlatList>(null);
   const refMsgInput = useRef<TextInput>(null);
   const [inEditMode, setInEditMode] = useState(false);
   const [isLoadingResponse, setIsLoadingResponse] = useState(false);
@@ -86,6 +87,7 @@ export const useChat = (props: ChatProps) => {
     setIsLoadingResponse, // TODO(ME): Delete this later, It was added to fix the linting error
     setDisableSend, // TODO(ME): Delete this later, It was added to fix the linting error
     refMsgInput,
+    refMsgList,
     sendMsg,
     disableSend,
     isLoadingResponse,

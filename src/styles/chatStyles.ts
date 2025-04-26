@@ -44,6 +44,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   msgBox: {
+    maxWidth: 300,
     backgroundColor: '#bdd7e6',
     alignItems: 'center',
     justifyContent: 'center',

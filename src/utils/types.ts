@@ -92,11 +92,13 @@ export interface ChatPropsBase {
 type ChatPropsWithRefresh = ChatPropsBase & {
   refreshing: boolean;
   onRefresh: () => void;
+  refreshComponent?: ReactElements;
 };
 
 type ChatPropsWithoutRefresh = ChatPropsBase & {
   refreshing?: never;
   onRefresh?: never;
+  refreshComponent?: never;
 };
 
 export type ChatProps = ChatPropsWithRefresh | ChatPropsWithoutRefresh;

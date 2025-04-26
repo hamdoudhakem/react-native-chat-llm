@@ -1,11 +1,21 @@
 import { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ChatLlm, type Message } from 'react-native-chat-llm';
+import { View } from 'react-native';
+import { ChatLlm, type Message, MsgsPlaceholders } from 'react-native-chat-llm';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 // import { styles } from './styles';
 
-const App = () => {
+const Stack = createNativeStackNavigator();
+
+const Home = () => {
+  const [msgPortionIndex, setMsgPortionIndex] = useState(25);
+
   const [msg, setMsg] = useState('');
-  const [msgs, setMsgs] = useState<Message[]>([]);
+  const [msgs, setMsgs] = useState<Message[]>(
+    MsgsPlaceholders.slice(msgPortionIndex)
+  );
   const [refreshing, setRefreshing] = useState(false);
 
   const [stopResponse, setStopResponse] = useState(false);
@@ -35,9 +45,8 @@ const App = () => {
   //   msgs?.[msgs.length - 1]
   // );
 
-  //TODO(ME): Add a navigation bar at the top to help get the functionalities right in it's envirnment
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <ChatLlm
         msg={msg}
         setMsg={setMsg}
@@ -50,10 +59,39 @@ const App = () => {
         refreshing={refreshing}
         onRefresh={() => {
           setRefreshing(true);
-          setTimeout(() => setRefreshing(false), 10000);
+
+          //An Example on Refreshing the list
+          setTimeout(
+            () => {
+              setMsgs(
+                MsgsPlaceholders.slice(
+                  msgPortionIndex - 5 <= 0 ? 0 : msgPortionIndex - 5
+                )
+              );
+              setMsgPortionIndex((prev) => {
+                if (prev - 5 >= 0) {
+                  return prev - 5;
+                }
+                return 0;
+              });
+              setRefreshing(false);
+            },
+
+            500
+          );
         }}
       />
-    </SafeAreaView>
+    </View>
+  );
+};
+
+const App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={Home} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
