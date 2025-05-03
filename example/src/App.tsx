@@ -17,6 +17,7 @@ const Home = () => {
     MsgsPlaceholders.slice(msgPortionIndex)
   );
   const [refreshing, setRefreshing] = useState(false);
+  const [remainingMsgs, setRemainingMsgs] = useState(true);
 
   const [stopResponse, setStopResponse] = useState(false);
 
@@ -57,12 +58,12 @@ const Home = () => {
         backgroundImage={require('../assets/background.png')}
         saveOption={'MMKV'}
         refreshing={refreshing}
-        onRefresh={() => {
-          setRefreshing(true);
-
+        setRefreshing={setRefreshing}
+        remainingMsgs={remainingMsgs}
+        onRefresh={async () => {
           //An Example on Refreshing the list
-          setTimeout(
-            () => {
+          await new Promise((resolve) =>
+            setTimeout(() => {
               setMsgs(
                 MsgsPlaceholders.slice(
                   msgPortionIndex - 5 <= 0 ? 0 : msgPortionIndex - 5
@@ -74,10 +75,12 @@ const Home = () => {
                 }
                 return 0;
               });
-              setRefreshing(false);
-            },
+              if (msgPortionIndex - 5 <= 0) {
+                setRemainingMsgs(false);
+              }
 
-            500
+              resolve(null);
+            }, 500)
           );
         }}
       />

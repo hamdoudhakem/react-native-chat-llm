@@ -19,7 +19,7 @@ type ReactElements = React.ReactElement<
 // ChatPropsBase is the base type for ChatPropsWithRefresh and ChatPropsWithoutRefresh
 export interface ChatPropsBase {
   // Logic properties
-  msg: string; // TODO(ME): Check if I should use a string or a Message Type
+  msg: string;
   setMsg: React.Dispatch<React.SetStateAction<string>>;
   msgs: Message[];
   setMsgs: React.Dispatch<React.SetStateAction<Message[]>>;
@@ -29,6 +29,7 @@ export interface ChatPropsBase {
   cancelResponse: () => void;
   // REMARK(ME): I don't think we can create this (too constraining for user), but let's keep it for now
   GenerateGenerator?: () => (func: (token: string) => void) => Promise<void>; // returns the AI response generator
+  remainingMsgs?: boolean; //Should the chat let the user refresh to load new messages
 
   // Selected Options (additional options to "Copy" and "delete")
   selectedOptions?: {
@@ -91,12 +92,14 @@ export interface ChatPropsBase {
 // Maybe I will get rid of this
 type ChatPropsWithRefresh = ChatPropsBase & {
   refreshing: boolean;
+  setRefreshing: (val: boolean) => void;
   onRefresh: () => void;
   refreshComponent?: ReactElements;
 };
 
 type ChatPropsWithoutRefresh = ChatPropsBase & {
   refreshing?: never;
+  setRefreshing?: never;
   onRefresh?: never;
   refreshComponent?: never;
 };
