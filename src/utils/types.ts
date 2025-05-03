@@ -7,10 +7,9 @@ import type {
   ViewToken,
 } from 'react-native';
 
-type ReactElements = React.ReactElement<
-  any,
-  string | React.JSXElementConstructor<any>
->;
+export type ReactElements =
+  | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+  | React.ComponentType<any>;
 
 // ==============================
 // Chat Props Types
@@ -23,18 +22,17 @@ export interface ChatPropsBase {
   setMsg: React.Dispatch<React.SetStateAction<string>>;
   msgs: Message[];
   setMsgs: React.Dispatch<React.SetStateAction<Message[]>>;
-  // TODO(ME): Complete this later/ Or completely discard it. depends on the architecture
-  auto?: boolean;
   MsgGenerator: (func: (token: string) => void) => Promise<void>; // returns the AI response
   cancelResponse: () => void;
+  remainingMsgs?: boolean; // Should the chat let the user refresh to load new messages
+  auto?: boolean; // TODO(ME): Complete this later/ Or completely discard it. depends on the architecture
   // REMARK(ME): I don't think we can create this (too constraining for user), but let's keep it for now
   GenerateGenerator?: () => (func: (token: string) => void) => Promise<void>; // returns the AI response generator
-  remainingMsgs?: boolean; //Should the chat let the user refresh to load new messages
 
-  // Selected Options (additional options to "Copy" and "delete")
+  // Selected Options (additional options to "Copy", "Edit" and "delete")
   selectedOptions?: {
     name: string;
-    image: number | { uri: string } | ReactElements; // in case of custom components or expo-vetors
+    image: number | { uri: string } | ReactElements; // in case of custom components or expo-vectors
     onPress: () => void;
   }[];
 
@@ -51,7 +49,7 @@ export interface ChatPropsBase {
   msgContainerStyle?: StyleProp<ViewStyle>;
   msgTextStyle?: { role: Role; style: StyleProp<ViewStyle> };
   msgTextParsers?: (msg: string) => React.ReactElement[]; // Italicize, etc...
-  msgLoader?: ReactElements; // what to show inside the msg container when the msg is loading
+  msgLoader?: ReactElements; // what Loader to show while the msg is loading
   aiMsgLoadingOption?: AiMsgLoadingType; // TODO(ME): set if the msg loads in one go or with each token
 
   // Sounds
