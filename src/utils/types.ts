@@ -110,7 +110,7 @@ export type ChatProps = ChatPropsWithRefresh | ChatPropsWithoutRefresh;
 
 export interface MsgContainerProps {
   msg: Message;
-  onOptionPress?: (option: string, msg: Message) => void;
+  onOptionPress: (option: string, msg: Message) => void;
 }
 
 export interface Message {

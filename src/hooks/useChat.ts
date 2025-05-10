@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import type { FlatList, TextInput } from 'react-native';
 
 import type { ChatProps, Message, Role } from '../utils/types';
@@ -24,33 +24,8 @@ export const useChat = (props: ChatProps) => {
   const [inEditMode, setInEditMode] = useState(false);
   const [isLoadingResponse, setIsLoadingResponse] = useState(false);
   const [disableSend, setDisableSend] = useState(false);
-  const [postReverseMsgs, setPostReverseMsgs] = useState<Message[]>([]);
 
   let { msg, setMsg, msgs, setMsgs, cancelResponse } = props;
-
-  useEffect(() => {
-    // TODO(ME): Maybe change this operation and make it happen when a specefic change happens
-    // so I don't have to filter in case of a refresh, add Msg, delete, ...
-    if (postReverseMsgs.length > 0 && msgs.length > postReverseMsgs.length) {
-      const lastMsg = postReverseMsgs[0];
-      let lastMsgIndex = msgs.length - 1;
-      while (lastMsg!.id !== msgs[lastMsgIndex]!.id) {
-        lastMsgIndex--;
-      }
-
-      const newAddedMsgs = msgs.slice(lastMsgIndex);
-      setPostReverseMsgs((prev) => {
-        prev.unshift(...newAddedMsgs);
-        return prev;
-      });
-    } else if (msgs.length < postReverseMsgs.length) {
-      // TODO(ME): in case of deleting or editing make it as effecient as possible by doing
-      // it directly with the actual change instead of doing it on the useEffect
-    } else {
-      // When it first loads
-      setPostReverseMsgs(msgs.toReversed());
-    }
-  }, [msgs, postReverseMsgs]);
 
   async function sendMsg() {
     const newMsgs = [...msgs];

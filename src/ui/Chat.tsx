@@ -6,7 +6,10 @@ import { InputField } from './InputField';
 import { useChat } from '../hooks';
 
 import { styles } from '../styles/chatStyles';
-import { renderElementOrComponent } from '../utils/usefullFunctions';
+import {
+  renderElementOrComponent,
+  optimizedReverseArray,
+} from '../utils/usefullFunctions';
 
 export const ChatLlm = (props: ChatProps) => {
   const {
@@ -36,9 +39,9 @@ export const ChatLlm = (props: ChatProps) => {
         // These 2 properties are the logic behind the user loading new messages without any
         // stutter or quick flash of scrolling to the top and back to where he was after load
         inverted
-        data={props.msgs.toReversed()} // TODO(ME): create a more efficient msgs function in utils, it will only reverse once and then it will push or insert new elements
+        data={optimizedReverseArray(props.msgs)}
         renderItem={({ item, index }) => (
-          <MsgContainer key={index} msg={item} />
+          <MsgContainer key={index} msg={item} onOptionPress={() => {}} />
         )}
         // List Components
         ListHeaderComponent={renderElementOrComponent(props.footer)}
@@ -88,6 +91,7 @@ export const ChatLlm = (props: ChatProps) => {
         onViewableItemsChanged={props.onViewableItemsChanged}
         viewabilityConfig={props.viewabilityConfig}
       />
+
       {/* The Text Field and Send Button */}
       <InputField
         refMsgInput={refMsgInput}

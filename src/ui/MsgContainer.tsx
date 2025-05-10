@@ -1,17 +1,15 @@
-import { View, Text, Pressable, Animated } from 'react-native';
-import type { MsgContainerProps } from '../utils/types';
+import React, { useState } from 'react';
+import { View, Text, Pressable, Animated, Keyboard } from 'react-native';
 
-import React from 'react';
+import type { MsgContainerProps } from '../utils/types';
 import { Entypo } from '@expo/vector-icons';
 import { styles } from '../styles/chatStyles';
 import { ItalicizeText } from '../utils/italicize';
 
-// import { OptionsMenuModal } from './options-menu';
+import { OptionsMenuModal } from './optionsMenu';
 
-const MsgContainer = ({
-  msg, //onOptionPress
-}: MsgContainerProps) => {
-  // const [modalVisible, setModalVisible] = useState(false);
+const MsgContainer = ({ msg, onOptionPress }: MsgContainerProps) => {
+  const [modalVisible, setModalVisible] = useState(false);
 
   // console.log({msgID: msg.id, text: msg.content.substring(0, 10)})
   // console.log('MSG', msg)
@@ -26,22 +24,22 @@ const MsgContainer = ({
   //   }).start();
   // };
 
-  // const closeModal = () => {
-  //   setModalVisible(false);
-  //   selectedAnim.setValue(1);
-  // };
+  const closeModal = () => {
+    setModalVisible(false);
+    // selectedAnim.setValue(1);
+  };
 
   return (
     <View style={{ marginVertical: 3 }}>
       {/* The Options menu that appears when Long clicking a Message */}
-      {/* <OptionsMenuModal
+      <OptionsMenuModal
         modalVisible={modalVisible}
         closeModal={closeModal}
         msgProps={{
           msg,
           onOptionPress,
         }}
-      /> */}
+      />
 
       <View
         style={
@@ -69,17 +67,17 @@ const MsgContainer = ({
 
         {/* The Message box*/}
         <Pressable
-        // onPressIn={() => setTimeout(() => Animate(0.92, 100), 60)}
-        // onLongPress={() => {
-        //   Keyboard.dismiss();
-        //   setModalVisible(true);
-        //   Animate(1.05, 100);
-        // }}
-        // onPressOut={() => {
-        //   if (!modalVisible) {
-        //     selectedAnim.setValue(1);
-        //   }
-        // }}
+          // onPressIn={() => setTimeout(() => Animate(0.92, 100), 60)}
+          onLongPress={() => {
+            Keyboard.dismiss();
+            setModalVisible(true); // TODO(ME): Let the user the possibility to add haptic feedback if he wants
+            // Animate(1.05, 100);
+          }}
+          // onPressOut={() => {
+          //   if (!modalVisible) {
+          //     selectedAnim.setValue(1);
+          //   }
+          // }}
         >
           <Animated.View
             style={[
@@ -121,7 +119,6 @@ const MsgContainer = ({
   );
 };
 
-//TODO(ME): Fix the message not updating as the response is being written
 const MsgContainerOptimized = React.memo(
   (props: MsgContainerProps) => <MsgContainer {...props} />,
   (prev, next) => prev.msg === next.msg
