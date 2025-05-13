@@ -39,41 +39,44 @@ export const OptionsMenuModal = ({
   const [closing, setClosing] = useState(false);
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
   const slidingAnim = useRef(new Animated.Value(height)).current;
-  const FadeInAnim = useRef(new Animated.Value(0)).current;
+  const FadeAnim = useRef(new Animated.Value(0)).current;
 
   const AnimateSliding = (val: number, animTime: number = 200) => {
-    Animated.timing(slidingAnim, {
+    return Animated.timing(slidingAnim, {
       toValue: val,
       duration: animTime,
       easing: Easing.inOut(Easing.exp),
       useNativeDriver: false,
-    }).start();
+    });
   };
 
-  const AnimateFadeIn = (val: number, animTime: number = 200) => {
-    Animated.timing(FadeInAnim, {
-      toValue: val,
+  const AnimateFade = (val: number, animTime: number = 200) => {
+    return Animated.timing(FadeAnim, {
+      toValue: val * 1000,
       duration: animTime,
+      easing: Easing.inOut(Easing.exp),
       useNativeDriver: true,
-    }).start();
+    });
   };
 
-  // TODO(ME): when closing the modal the Background isn't fading out
   const close = () => {
     setClosing(true);
-    AnimateFadeIn(0, 200);
-    AnimateSliding(height, 400);
-    setTimeout(() => closeModal(), 400);
+
+    Animated.parallel([
+      Animated.sequence([Animated.delay(1), AnimateFade(0, 300)]),
+      AnimateSliding(height, 400),
+    ]).start(() => {
+      closeModal();
+      slidingAnim.setValue(height);
+      FadeAnim.setValue(0);
+    });
   };
 
   useEffect(() => {
     if (modalVisible) {
       setClosing(false);
-      AnimateSliding(0, 400);
-      setTimeout(() => AnimateFadeIn(0.1, 400), 200);
-    } else {
-      slidingAnim.setValue(height);
-      FadeInAnim.setValue(0);
+      Animated.sequence([Animated.delay(1), AnimateFade(0.3, 400)]).start();
+      AnimateSliding(0, 400).start();
     }
   }, [modalVisible]); //eslint-disable-line
 
@@ -91,7 +94,7 @@ export const OptionsMenuModal = ({
           style={{
             flex: 1,
             backgroundColor: 'black',
-            opacity: FadeInAnim,
+            opacity: Animated.divide(FadeAnim, 1000),
           }}
         />
 

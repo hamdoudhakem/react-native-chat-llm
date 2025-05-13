@@ -72,9 +72,9 @@ export const ChatLlm = (props: ChatProps) => {
               event.nativeEvent.layoutMeasurement.height;
 
             const contentSizeY = event.nativeEvent.contentSize.height;
-            console.log(
-              'position: ' + currentPosY + ' || content Y Size: ' + contentSizeY
-            );
+            // console.log(
+            //   'position: ' + currentPosY + ' || content Y Size: ' + contentSizeY
+            // );
             if (Math.abs(currentPosY - contentSizeY) < 35) {
               if (props.refreshing === false) {
                 console.log('Start refreshing');
