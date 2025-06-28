@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#bdd7e6',
     alignItems: 'center',
     elevation: 2,
-    borderRadius: 50,
+    borderRadius: 30,
     marginLeft: 6,
     marginRight: 3,
     paddingRight: 3,

@@ -1,6 +1,7 @@
 import { View, FlatList, Image, ActivityIndicator } from 'react-native';
 
 import type { ChatProps } from '../utils/types';
+import { OptionsMenuModal } from './optionsMenu';
 import { MsgContainer } from './MsgContainer';
 import { InputField } from './InputField';
 import { useChat } from '../hooks';
@@ -21,6 +22,11 @@ export const ChatLlm = (props: ChatProps) => {
     stopResponseLLM,
     inEditMode,
     cancelEdit,
+    onOptionPress,
+    modalVisible,
+    selectedMsg,
+    closeModal,
+    SelectMsg,
   } = useChat(props);
 
   return (
@@ -33,6 +39,17 @@ export const ChatLlm = (props: ChatProps) => {
           style={styles.backgroundImage}
         />
       )}
+
+      {/* The Options menu that appears when Long clicking a Message */}
+      <OptionsMenuModal
+        modalVisible={modalVisible}
+        closeModal={closeModal}
+        msgProps={{
+          msg: selectedMsg,
+          onOptionPress,
+        }}
+      />
+
       {/* The Chat List */}
       <FlatList
         ref={refMsgList}
@@ -41,7 +58,7 @@ export const ChatLlm = (props: ChatProps) => {
         inverted
         data={optimizedReverseArray(props.msgs)}
         renderItem={({ item, index }) => (
-          <MsgContainer key={index} msg={item} onOptionPress={() => {}} />
+          <MsgContainer key={index} msg={item} onSelected={SelectMsg} />
         )}
         // List Components
         ListHeaderComponent={renderElementOrComponent(props.footer)}

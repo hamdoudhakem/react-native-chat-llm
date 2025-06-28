@@ -2,28 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import {
   Modal,
   Pressable,
-  TouchableOpacity,
+  TouchableHighlight,
   Text,
   View,
   Dimensions,
   Animated,
   Easing,
 } from 'react-native';
-import { MaterialIcons, Ionicons } from '@expo/vector-icons';
-import type { Message } from '../utils/types';
+import type { OptionsMenuProps } from '../utils/types';
+import { renderImage } from '../utils/usefullFunctions';
+import { optionsMenu } from '../utils/constant';
 import { styles } from '../styles/chatStyles';
-
-type OptionsMenuProps = {
-  msg: Message;
-  onOptionPress: (option: string, msg: Message) => void;
-  lastMsgId?: number;
-};
-
-const optionsMenu = [
-  { name: 'Copy', image: <Ionicons name="copy-outline" size={28} /> },
-  { name: 'Edit', image: <MaterialIcons name="edit" size={28} /> },
-  { name: 'Delete', image: <MaterialIcons name="delete" size={28} /> },
-];
 
 const { height } = Dimensions.get('window');
 
@@ -31,11 +20,7 @@ export const OptionsMenuModal = ({
   modalVisible,
   msgProps: { msg, onOptionPress },
   closeModal,
-}: {
-  modalVisible: boolean;
-  msgProps: OptionsMenuProps;
-  closeModal: () => void;
-}) => {
+}: OptionsMenuProps) => {
   const [closing, setClosing] = useState(false);
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
   const slidingAnim = useRef(new Animated.Value(height)).current;
@@ -72,6 +57,7 @@ export const OptionsMenuModal = ({
     });
   };
 
+  // Activates when the component loads
   useEffect(() => {
     if (modalVisible) {
       setClosing(false);
@@ -106,24 +92,29 @@ export const OptionsMenuModal = ({
           ]}
         >
           {/* The Option Menu Buttons*/}
-          {optionsMenu.map((item, index) => {
-            if (msg.role === 'AI' && item.name === 'Delete') {
+          {/*TODO(ME): Maybe add an option to let the user choose how to show it */}
+          {Object.entries(optionsMenu).map((obj, index) => {
+            if (msg.role === 'AI' && obj[0] === 'Delete') {
               return null;
             }
 
+            const item = obj[1];
             return (
-              <TouchableOpacity
+              <TouchableHighlight
                 key={index}
                 style={styles.optionsButton}
                 disabled={closing}
+                underlayColor="rgba(1,1,1,0.08)"
                 onPress={() => {
-                  onOptionPress(item.name, msg);
+                  onOptionPress(item, msg);
                   close();
                 }}
               >
-                {item.image}
-                <Text style={styles.OptionsButtonText}>{item.name}</Text>
-              </TouchableOpacity>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  {renderImage(item.image)}
+                  <Text style={styles.OptionsButtonText}>{item.name}</Text>
+                </View>
+              </TouchableHighlight>
             );
           })}
         </Animated.View>

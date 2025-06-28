@@ -1,5 +1,6 @@
 import React from 'react';
 import type { ReactElements } from './types';
+import { Image } from 'react-native';
 
 export function renderElementOrComponent(Comp?: ReactElements) {
   if (typeof Comp === 'function') {
@@ -10,9 +11,18 @@ export function renderElementOrComponent(Comp?: ReactElements) {
   return null;
 }
 
+export function renderImage(image: number | { uri: string } | ReactElements) {
+  if (React.isValidElement(image)) {
+    return image;
+  } else if (typeof image === 'number' || 'uri' in image) {
+    return <Image source={image} />;
+  }
+  return null;
+}
+
 export function optimizedReverseArray<T>(array: T[]): T[] {
   const len = array.length;
-  if (len == 1) {
+  if (len === 1) {
     return [...array];
   }
 

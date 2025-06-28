@@ -1,7 +1,14 @@
 import { useRef, useState } from 'react';
 import type { FlatList, TextInput } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 
-import type { ChatProps, Message, Role } from '../utils/types';
+import type {
+  ChatProps,
+  Message,
+  Role,
+  SelectedMenuOption,
+} from '../utils/types';
+import { initMsgPlaceHolder } from '../utils/constant';
 
 const createMsg = (
   id: number,
@@ -24,6 +31,8 @@ export const useChat = (props: ChatProps) => {
   const [inEditMode, setInEditMode] = useState(false);
   const [isLoadingResponse, setIsLoadingResponse] = useState(false);
   const [disableSend, setDisableSend] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedMsg, setSelectedMsg] = useState<Message>(initMsgPlaceHolder);
 
   let { msg, setMsg, msgs, setMsgs, cancelResponse } = props;
 
@@ -83,6 +92,28 @@ export const useChat = (props: ChatProps) => {
     setMsg('');
   }
 
+  // TODO(ME): Complete the Option Press Functionalities
+  async function onOptionPress(option: SelectedMenuOption, msg: Message) {
+    if (!option.onPress) {
+      if (option.name === 'Copy') {
+        await Clipboard.setStringAsync(msg.content);
+      } else if (option.name === 'Delete') {
+      } else if (option.name === 'Edit') {
+      }
+    } else {
+      option.onPress(msg);
+    }
+  }
+
+  function closeModal() {
+    setModalVisible(false);
+  }
+
+  function SelectMsg(msg: Message) {
+    setSelectedMsg(msg);
+    setModalVisible(true);
+  }
+
   return {
     setIsLoadingResponse, // TODO(ME): Delete this later, It was added to fix the linting error
     setDisableSend, // TODO(ME): Delete this later, It was added to fix the linting error
@@ -94,5 +125,10 @@ export const useChat = (props: ChatProps) => {
     stopResponseLLM,
     inEditMode,
     cancelEdit,
+    onOptionPress,
+    modalVisible,
+    selectedMsg,
+    closeModal,
+    SelectMsg,
   };
 };

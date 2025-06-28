@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, Pressable, Animated, Keyboard } from 'react-native';
 
 import type { MsgContainerProps } from '../utils/types';
@@ -6,11 +6,7 @@ import { Entypo } from '@expo/vector-icons';
 import { styles } from '../styles/chatStyles';
 import { ItalicizeText } from '../utils/italicize';
 
-import { OptionsMenuModal } from './optionsMenu';
-
-const MsgContainer = ({ msg, onOptionPress }: MsgContainerProps) => {
-  const [modalVisible, setModalVisible] = useState(false);
-
+const MsgContainer = ({ msg, onSelected }: MsgContainerProps) => {
   // console.log({msgID: msg.id, text: msg.content.substring(0, 10)})
   // console.log('MSG', msg)
 
@@ -24,23 +20,8 @@ const MsgContainer = ({ msg, onOptionPress }: MsgContainerProps) => {
   //   }).start();
   // };
 
-  const closeModal = () => {
-    setModalVisible(false);
-    // selectedAnim.setValue(1);
-  };
-
   return (
     <View style={{ marginVertical: 3 }}>
-      {/* The Options menu that appears when Long clicking a Message */}
-      <OptionsMenuModal
-        modalVisible={modalVisible}
-        closeModal={closeModal}
-        msgProps={{
-          msg,
-          onOptionPress,
-        }}
-      />
-
       <View
         style={
           msg.role === 'User'
@@ -70,7 +51,7 @@ const MsgContainer = ({ msg, onOptionPress }: MsgContainerProps) => {
           // onPressIn={() => setTimeout(() => Animate(0.92, 100), 60)}
           onLongPress={() => {
             Keyboard.dismiss();
-            setModalVisible(true); // TODO(ME): Let the user the possibility to add haptic feedback if he wants
+            onSelected(msg); // TODO(ME): Let the user the possibility to add haptic feedback if he wants
             // Animate(1.05, 100);
           }}
           // onPressOut={() => {

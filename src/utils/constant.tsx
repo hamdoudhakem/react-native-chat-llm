@@ -1,4 +1,19 @@
-import { type Role } from './types';
+import { type Role, type SelectedMenuOption } from './types';
+import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+
+export const initMsgPlaceHolder = {
+  id: -1,
+  content: "I'm the initial Msg Place holder",
+  role: 'User' as Role,
+  createdAt: new Date(),
+  isEdited: false,
+};
+
+export const optionsMenu: { [key: string]: SelectedMenuOption } = {
+  Copy: { name: 'Copy', image: <Ionicons name="copy-outline" size={28} /> },
+  Edit: { name: 'Edit', image: <MaterialIcons name="edit" size={28} /> },
+  Delete: { name: 'Delete', image: <MaterialIcons name="delete" size={28} /> },
+};
 
 export const MsgsPlaceholders = [
   {

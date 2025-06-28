@@ -1,3 +1,4 @@
+//TODO(ME): Create an index file for the utils and make other modules from outside folders import through it
 import React from 'react';
 import type {
   StyleProp,
@@ -29,14 +30,10 @@ export interface ChatPropsBase {
   // REMARK(ME): I don't think we can create this (too constraining for user), but let's keep it for now
   GenerateGenerator?: () => (func: (token: string) => void) => Promise<void>; // returns the AI response generator
 
-  // Selected Options (additional options to "Copy", "Edit" and "delete")
-  selectedOptions?: {
-    name: string;
-    image: number | { uri: string } | ReactElements; // in case of custom components or expo-vectors
-    onPress: () => void;
-  }[];
+  // TODO(ME): Selected Options (additional options to "Copy", "Edit" and "delete")
+  selectedOptions?: SelectedMenuOption[];
 
-  // Send Options (additional options like send image or file)
+  // TODO(Me): Send Options (additional options like send image or file)
   sendOptions?: {
     name: string;
     image: number | { uri: string } | ReactElements; // in case of custom components or expo-vetors
@@ -110,7 +107,7 @@ export type ChatProps = ChatPropsWithRefresh | ChatPropsWithoutRefresh;
 
 export interface MsgContainerProps {
   msg: Message;
-  onOptionPress: (option: string, msg: Message) => void;
+  onSelected: (msg: Message) => void;
 }
 
 export interface Message {
@@ -119,6 +116,22 @@ export interface Message {
   role: Role;
   createdAt: Date;
   isEdited: boolean;
+}
+
+export interface OptionsMenuProps {
+  modalVisible: boolean;
+  msgProps: {
+    msg: Message;
+    onOptionPress: (option: SelectedMenuOption, msg: Message) => void;
+    lastMsgId?: number;
+  };
+  closeModal: () => void;
+}
+
+export interface SelectedMenuOption {
+  name: string;
+  image: number | { uri: string } | ReactElements; // in case of custom components or expo-vectors
+  onPress?: (msg?: Message) => void;
 }
 
 export interface InputFieldProps {
